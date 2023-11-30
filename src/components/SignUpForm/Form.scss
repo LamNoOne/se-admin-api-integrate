@@ -1,0 +1,103 @@
+$primary-color: #1d3557;
+$error-color: #e63946;
+$text-color: #293241;
+$color-white: #fff;
+$shadow-color: #dedee6;
+$border-radius: 4px;
+
+.container {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+  padding: 1rem 2rem;
+  border-radius: $border-radius;
+  background: $color-white;
+  box-shadow: 10px 10px 20px rgba($shadow-color, 0.4),
+    -10px -10px 20px rgba($shadow-color, 0.8),
+    -8px 8px 30px rgba($shadow-color, 1);
+
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: $text-color;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: #777;
+    font-weight: 500;
+    margin-bottom: 2rem;
+  }
+
+  label,
+  input {
+    color: $text-color;
+  }
+
+  label {
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  input {
+    border: 2px solid rgba($primary-color, 0.8);
+    border-radius: $border-radius;
+    padding: 0.5rem 1rem;
+    padding-left: 1rem;
+    font-size: 1rem;
+  }
+
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+  }
+
+  button {
+    color: $color-white;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 500;
+    background: $primary-color;
+    border-radius: $border-radius;
+    border: none;
+    cursor: pointer;
+    padding: 0.7rem 1.2rem;
+    margin-top: 0.8rem;
+
+    &:hover {
+      background: rgba($primary-color, 0.8);
+    }
+  }
+
+  .input-error {
+    border-color: $error-color;
+  }
+
+  .error {
+    color: $error-color;
+    font-size: 1rem;
+    margin-top: 0.3rem;
+  }
+
+  .disabled-btn {
+    cursor: not-allowed;
+    background: rgba($primary-color, 0.8);
+  }
+  .forgot_password {
+    font-size: 0.9rem;
+    display: flex;
+    font-weight: 500;
+    justify-content: flex-end;
+    color: blue;
+  }
+  .no_account {
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    a {
+      color: blue;
+    }
+  }
+}
