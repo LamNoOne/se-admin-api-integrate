@@ -27,6 +27,7 @@ const SignInForm = () => {
         try {
             const userData = await login(values).unwrap()
             dispatch(setCredentials(userData))
+            sessionStorage.setItem('isLogin', true)
             localStorage.setItem(
                 "admin",
                 JSON.stringify(userData.metadata.user)

@@ -3,93 +3,20 @@ import { SearchOutlined } from "@ant-design/icons"
 import { useNavigate } from "react-router-dom"
 import Highlighter from "react-highlight-words"
 import { Button, Input, Space, Table } from "antd"
-// Get data from API
-const data = [
-    {
-        id: 1,
-        name: "Air Filters",
-        items: 0,
-        description:
-            "Non minim anim eiusmod nisi non deserunt incididunt ea duis.",
-    },
-
-    {
-        id: 2,
-        name: "Cargo Accessories",
-        items: 0,
-        description:
-            "Minim labore Lorem non pariatur occaecat adipisicing voluptate proident ea ad.",
-    },
-
-    {
-        id: 3,
-        name: "Consoles & Organizers",
-        items: 0,
-        description:
-            "Nostrud veniam fugiat et nulla sunt dolore veniam sunt est aute excepteur nulla.",
-    },
-
-    {
-        id: 4,
-        name: "Engine & Drivetrain",
-        items: 0,
-        description:
-            "Voluptate proident tempor cupidatat incididunt et veniam tempor.",
-    },
-
-    {
-        id: 5,
-        name: "Floor Mats",
-        items: 0,
-        description: "Esse consectetur irure dolor tempor aute minim.",
-    },
-
-    {
-        id: 6,
-        name: "Fuel Systems",
-        items: 11,
-        description:
-            "Commodo dolor ullamco occaecat cupidatat quis deserunt magna veniam aliquip.",
-    },
-
-    {
-        id: 7,
-        name: "For premiumGauges",
-        items: 0,
-        description:
-            "Mollit ullamco laborum labore deserunt ullamco adipisicing labore eu excepteur ipsum reprehenderit incididunt occaecat.",
-    },
-
-    {
-        id: 8,
-        name: "Headlights & Lighting",
-        items: 3,
-        description:
-            "Anim nostrud amet eiusmod nulla reprehenderit nisi tempor ipsum ipsum incididunt.",
-    },
-
-    {
-        id: 9,
-        name: "Interior Parts",
-        items: 15,
-        description:
-            "Aute velit commodo ea officia voluptate dolor duis quis eiusmod excepteur ea tempor amet.",
-    },
-
-    {
-        id: 10,
-        name: "Mobile Electronics",
-        items: 0,
-        description:
-            "Aute labore magna mollit labore velit excepteur sunt sit mollit excepteur veniam ipsum veniam.",
-    },
-]
+import { useGetAllCategoriesQuery } from '../features/category/categoryApiSlice'
 
 const CategoryTable = () => {
     const navigate = useNavigate()
+    const { data: categories, isLoading, isError} = useGetAllCategoriesQuery()
     const [searchText, setSearchText] = useState("")
     const [searchedColumn, setSearchedColumn] = useState("")
     const searchInput = useRef(null)
+
+    if(isLoading) return <div>Loading...</div>
+    if(isError) return <div>Missing category!</div>
+
+    const data = categories?.metadata?.categories
+
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm()
         setSearchText(selectedKeys[0])
@@ -215,7 +142,7 @@ const CategoryTable = () => {
             title: "Name",
             className: "text-base",
             dataIndex: "name",
-            width: "20%",
+            width: "40%",
             ...getColumnSearchProps("name"),
             sorter: (a, b) => a.name.length - b.name.length,
             sortDirections: ["descend", "ascend"],
@@ -227,17 +154,6 @@ const CategoryTable = () => {
                     {text}
                 </button>
             ),
-        },
-        {
-            title: "Items",
-            className: "text-base",
-            dataIndex: "items",
-            key: "items",
-            width: "20%",
-            ...getColumnSearchProps("items"),
-            sorter: (a, b) => a.items - b.items,
-            sortDirections: ["descend", "ascend"],
-            render: (text) => <span>{text}</span>,
         },
         {
             title: "Description",
@@ -266,6 +182,6 @@ const CategoryTable = () => {
             ),
         },
     ]
-    return <Table columns={columns} dataSource={data} pagination />
+    return <Table columns={columns} dataSource={data} pagination={true} />
 }
 export default CategoryTable

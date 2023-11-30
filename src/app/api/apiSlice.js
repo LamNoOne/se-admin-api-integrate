@@ -6,8 +6,8 @@ const baseQuery = fetchBaseQuery({
     credentials: 'include',
     prepareHeaders: (headers) => {
         headers.set("x-api-version", 1)
-        if(localStorage.getItem('user')) {
-            headers.set('x-user-id', JSON.parse(localStorage.getItem('user'))?.id)
+        if(localStorage.getItem('admin')) {
+            headers.set('x-user-id', JSON.parse(localStorage.getItem('admin'))?.id)
         }
         return headers
     }
@@ -36,5 +36,6 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
 export const apiSlice = createApi({
     baseQuery: baseQueryWithReauth,
+    tagTypes: ['Product'],
     endpoints: builder => ({})
 })

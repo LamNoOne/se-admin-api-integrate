@@ -1,9 +1,9 @@
 import React from "react"
 import { useState } from "react"
 
-const Inventory = ({ quantity, setQuantity }) => {
+const Inventory = ({ stockQuantity, setStockQuantity }) => {
     const setQuantityHandler = (value) => {
-        value > 0 ? setQuantity(value) : setQuantity(0)
+        value > 0 ? setStockQuantity(value) : setStockQuantity(0)
     }
     return (
         <div className="flex flex-col mt-6">
@@ -20,7 +20,7 @@ const Inventory = ({ quantity, setQuantity }) => {
                         type="number"
                         className="form-control text-base px-2 py-2 border outline-none hover:shadow-md w-full"
                         id="form-product/stock-quantity"
-                        value={quantity}
+                        value={stockQuantity}
                         onChange={(e) => setQuantityHandler(e.target.value)}
                     />
                 </div>

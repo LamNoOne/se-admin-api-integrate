@@ -8,39 +8,52 @@ import {
     Pricing,
     UploadImage,
 } from "../components"
-import { useParams, useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import Specification from "../components/Specification"
-const Product = () => {
-    let { id: productId } = useParams()
+import { useUpdateProductByIdMutation } from "../features/product/productApiSlice"
+
+const Product = (product) => {
     const naviagte = useNavigate()
-    console.log(productId)
-    useEffect(() => {
-        // if has product id
-        // dispactch get product info
-    }, [])
+    const isCreate = Object.keys(product).length === 0
+    console.log(isCreate, "create")
+    const location = useLocation()
+    const [updateProductById, { isLoading }] = useUpdateProductByIdMutation()
+    // const productId = location.state?.id
+    // const { data: product, isLoading, isSuccess, isError, error } = useGetProductByIdQuery({ id: productId })
+    // const product = product?.metadata?.product
     // if has product id => get product info and fill
-    const [name, setName] = useState("")
-    const [description, setDescription] = useState("")
+    const [name, setName] = useState(product?.name)
+    const [description, setDescription] = useState(product?.description)
     const [selectedFile, setSelectedFile] = useState(null)
-    const [screen, setScreen] = useState("")
-    const [operatingSystem, setOperatingSystem] = useState("")
-    const [processor, setProcessor] = useState("")
-    const [ram, setRam] = useState("")
-    const [storageCapacity, setStorageCapacity] = useState("")
-    const [dimensions, setDimensions] = useState("")
-    const [weight, setWeight] = useState("")
-    const [batteryCapacity, setbatteryCapacity] = useState("")
-    const [frontCameraResolution, setFrontCameraResolution] = useState("")
-    const [rearCameraResolution, setRearCameraResolution] = useState("")
-    const [connectivity, setConnectivity] = useState("")
-    const [color, setColor] = useState("")
-    const [category, setCategory] = useState()
-    const [price, setPrice] = useState("")
-    const [quantity, setQuantity] = useState("")
+    const [screen, setScreen] = useState(product?.screen)
+    const [operatingSystem, setOperatingSystem] = useState(
+        product?.operatingSystem
+    )
+    const [processor, setProcessor] = useState(product?.processor)
+    const [ram, setRam] = useState(product?.ram)
+    const [storageCapacity, setStorageCapacity] = useState(
+        product?.storageCapacity
+    )
+    const [dimensions, setDimensions] = useState(product?.dimensions)
+    const [weight, setWeight] = useState(product?.weight)
+    const [batteryCapacity, setbatteryCapacity] = useState(
+        product?.batteryCapacity
+    )
+    const [frontCameraResolution, setFrontCameraResolution] = useState(
+        product?.frontCameraResolution
+    )
+    const [rearCameraResolution, setRearCameraResolution] = useState(
+        product?.rearCameraResolution
+    )
+    const [connectivity, setConnectivity] = useState(product?.connectivity)
+    const [color, setColor] = useState(product?.color)
+    const [categoryId, setCategoryId] = useState(product?.categoryId)
+    const [price, setPrice] = useState(product?.price)
+    const [stockQuantity, setStockQuantity] = useState(product?.stockQuantity)
+
     console.log(
         name,
         description,
-        selectedFile,
         screen,
         operatingSystem,
         processor,
@@ -53,9 +66,9 @@ const Product = () => {
         rearCameraResolution,
         connectivity,
         color,
-        category,
         price,
-        quantity
+        stockQuantity,
+        categoryId
     )
 
     function handleChangeScreen(e) {
@@ -122,38 +135,60 @@ const Product = () => {
         handleChangeColor,
     }
 
-    // get all single Product Info
-    const submitImageHandler = async () => {
-        try {
-            let arr = []
-            for (let i = 0; i < selectedFile.length; i++) {
-                const data = await uploadCloud(selectedFile[i])
-                arr.push(data)
+    const canSave = [
+        name,
+        description,
+        screen,
+        operatingSystem,
+        processor,
+        ram,
+        storageCapacity,
+        dimensions,
+        weight,
+        batteryCapacity,
+        frontCameraResolution,
+        rearCameraResolution,
+        connectivity,
+        color,
+        price,
+        stockQuantity,
+        categoryId,
+    ].every(Boolean) && !isLoading
+
+    const submitHandleDeleteProduct = async () => {}
+    const submitHanleCreateProduct = async () => {}
+    const submitHandleUpdateProduct = async () => {
+        // Discuss update product's image,
+        const updateProduct = {
+            id: product?.id,
+            body: {
+                name,
+                description,
+                screen,
+                operatingSystem,
+                processor,
+                ram,
+                storageCapacity,
+                dimensions,
+                weight,
+                batteryCapacity,
+                frontCameraResolution,
+                rearCameraResolution,
+                connectivity,
+                color,
+                price,
+                stockQuantity,
+                categoryId,
+            },
+        }
+        if (canSave) {
+            try {
+                await updateProductById(updateProduct).unwrap()
+            } catch (error) {
+                console.error(error)
             }
-            return arr
-        } catch (error) {
-            console.log(error)
         }
     }
-
-    const submitHandler = async () => {
-        let url = []
-        url = await submitImageHandler()
-        console.log(description, name, url, category, price, quantity)
-
-        // Take data and send
-        //post request-FOR NEW or
-        ///put request to server-FOR HAS product ID => if and else
-    }
-
-    const deleteHandler = () => {
-        // dispatch action delete
-        // get promises state using ...(quen ba nos roi)
-        // if status is success => navigate to product list
-        naviagte("/product-list")
-    }
-
-    console.log(description)
 
     return (
         <>
@@ -162,14 +197,16 @@ const Product = () => {
                     <h1 className="text-[28px] font-medium mb-2">
                         Edit Product
                     </h1>
-                    <button
-                        type="submit"
-                        disabled={!Boolean(productId)}
-                        className="text-base mb-2 px-6 py-2 border mt-2 bg-[#ff0000] rounded text-white disabled:bg-red-500 hover:bg-orange-500 cursor-pointer disabled:cursor-none"
-                        onClick={deleteHandler}
-                    >
-                        Delete
-                    </button>
+                    {!isCreate && (
+                        <button
+                            type="submit"
+                            disabled={!Boolean(product.id)}
+                            className="text-base mb-2 px-6 py-2 border mt-2 bg-[#ff0000] rounded text-white disabled:bg-red-500 hover:bg-orange-500 cursor-pointer disabled:cursor-none"
+                            onClick={submitHandleDeleteProduct}
+                        >
+                            Delete
+                        </button>
+                    )}
                 </div>
                 <div className="flex flex-row gap-6">
                     <div className="part-1 flex flex-col gap-6 flex-1">
@@ -188,7 +225,7 @@ const Product = () => {
                                     type="text"
                                     className="form-control text-base px-2 py-2 border outline-none hover:shadow-md w-full"
                                     id="form-product/name"
-                                    value={name}
+                                    value={name || ""}
                                     onChange={(e) => setName(e.target.value)}
                                 />
                             </div>
@@ -197,7 +234,7 @@ const Product = () => {
                                     Description
                                 </h3>
                                 <Description
-                                    desciption={description}
+                                    description={description}
                                     setDescription={setDescription}
                                 />
                             </div>
@@ -210,33 +247,46 @@ const Product = () => {
                         </div>
                         <div className="flex flex-col border shadow-sm px-6 pb-6 bg-white">
                             <Inventory
-                                quantity={quantity}
-                                setQuantity={setQuantity}
+                                stockQuantity={stockQuantity}
+                                setStockQuantity={setStockQuantity}
                             />
                         </div>
                         <div className="category">
                             <CategorySelection
-                                category={category}
-                                setCategory={setCategory}
+                                categoryId={categoryId}
+                                setCategoryId={setCategoryId}
                             />
                         </div>
                         <div className="upload-multiple-images">
                             <UploadImage
+                                imageOrigin={product?.imageUrl}
                                 selectedFile={selectedFile}
                                 setSelectedFile={setSelectedFile}
                             />
                         </div>
                     </div>
                 </div>
-                <div className="button-submit">
-                    <button
-                        type="submit"
-                        className="text-base px-6 py-2 border mt-2 bg-[#ff0000] rounded text-white hover:bg-orange-500 cursor-pointer disabled:cursor-none"
-                        onClick={submitHandler}
-                    >
-                        Save
-                    </button>
-                </div>
+                {isCreate ? (
+                    <div className="button-submit-create">
+                        <button
+                            type="submit"
+                            className="text-base px-6 py-2 border mt-2 bg-[#ff0000] rounded text-white hover:bg-orange-500 cursor-pointer disabled:cursor-none"
+                            onClick={submitHanleCreateProduct}
+                        >
+                            Create Product
+                        </button>
+                    </div>
+                ) : (
+                    <div className="button-submit-update">
+                        <button
+                            type="submit"
+                            className="text-base px-6 py-2 border mt-2 bg-[#ff0000] rounded text-white hover:bg-orange-500 cursor-pointer disabled:cursor-none"
+                            onClick={submitHandleUpdateProduct}
+                        >
+                            Uodate Product
+                        </button>
+                    </div>
+                )}
             </section>
         </>
     )

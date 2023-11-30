@@ -11,6 +11,7 @@ import SignIn from "./SignIn"
 import SignUp from "./SignUp"
 import ForgotPassword from "./ForgotPassword"
 import Profile from "./Profile"
+import ProductEdit from "./ProductEdit"
 
 export {
     DashBoard,
@@ -25,5 +26,6 @@ export {
     SignIn,
     SignUp,
     ForgotPassword,
-    Profile
+    Profile,
+    ProductEdit
 }

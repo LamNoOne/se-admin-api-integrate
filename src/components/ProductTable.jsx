@@ -152,7 +152,8 @@ const ProductTable = () => {
             title: "Product",
             className: "text-base",
             dataIndex: "name",
-            width: "40%",
+            key: "name",
+            width: "30%",
             ...getColumnSearchProps("name"),
             sorter: (a, b) => a.name.length - b.name.length,
             sortDirections: ["descend", "ascend"],
@@ -223,6 +224,20 @@ const ProductTable = () => {
             ),
         },
         {
+            title: "Operation",
+            className: "text-base",
+            dataIndex: "operatingSystem",
+            key: "operatingSystem",
+            width: "10%",
+        },
+        {
+            title: "Screen",
+            className: "text-base",
+            dataIndex: "screen",
+            key: "screen",
+            width: "10%",
+        },
+        {
             title: "Stock",
             className: "text-base",
             dataIndex: "stockQuantity",
@@ -262,14 +277,20 @@ const ProductTable = () => {
     ]
     return (
         <>
-            <Table columns={columns} dataSource={data} pagination={false} />
-            <Pagination
-                total={total}
-                current={current}
-                onChange={setCurrent}
-                pageSize={limit}
-                showSizeChanger={false}
+            <Table
+                columns={columns}
+                dataSource={data}
+                pagination={false}
             />
+            <div className="flex items-center justify-end">
+                <Pagination
+                    total={total}
+                    current={current}
+                    onChange={setCurrent}
+                    pageSize={limit}
+                    showSizeChanger={false}
+                />
+            </div>
         </>
     )
 }

@@ -14,6 +14,7 @@ import {
     SignUp,
     ForgotPassword,
     Profile,
+    ProductEdit,
 } from "../views"
 import RequireAuth from "../features/auth/RequireAuth"
 
@@ -26,10 +27,13 @@ export default function Router() {
                 </RequireAuth>
             ),
             children: [
-                { path: "/", element: <DashBoard /> },
+                {
+                    path: "/",
+                    element: <DashBoard />,
+                },
                 { path: "/product-list", element: <ProductList /> },
                 { path: "/product", element: <Product /> },
-                { path: "/product/:id", element: <Product /> },
+                { path: "/product/:id", element: <ProductEdit /> },
                 { path: "/category-list", element: <CategoryList /> },
                 { path: "/category", element: <Category /> },
                 { path: "/category/:id", element: <Category /> },
