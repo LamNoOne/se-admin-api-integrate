@@ -295,7 +295,7 @@ const Product = (product) => {
                             className="text-base px-6 py-2 border mt-2 bg-[#ff0000] rounded text-white hover:bg-orange-500 cursor-pointer disabled:cursor-none"
                             onClick={submitHandleUpdateProduct}
                         >
-                            Uodate Product
+                            Update Product
                         </button>
                     </div>
                 )}

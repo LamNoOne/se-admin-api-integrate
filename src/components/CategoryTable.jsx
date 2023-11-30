@@ -3,17 +3,17 @@ import { SearchOutlined } from "@ant-design/icons"
 import { useNavigate } from "react-router-dom"
 import Highlighter from "react-highlight-words"
 import { Button, Input, Space, Table } from "antd"
-import { useGetAllCategoriesQuery } from '../features/category/categoryApiSlice'
+import { useGetAllCategoriesQuery } from "../features/category/categoryApiSlice"
 
 const CategoryTable = () => {
     const navigate = useNavigate()
-    const { data: categories, isLoading, isError} = useGetAllCategoriesQuery()
+    const { data: categories, isLoading, isError } = useGetAllCategoriesQuery()
     const [searchText, setSearchText] = useState("")
     const [searchedColumn, setSearchedColumn] = useState("")
     const searchInput = useRef(null)
 
-    if(isLoading) return <div>Loading...</div>
-    if(isError) return <div>Missing category!</div>
+    if (isLoading) return <div>Loading...</div>
+    if (isError) return <div>Missing category!</div>
 
     const data = categories?.metadata?.categories
 
@@ -149,7 +149,11 @@ const CategoryTable = () => {
             render: (text, record) => (
                 <button
                     className="text-base font-medium cursor-pointer hover:underline hover:text-blue-700"
-                    onClick={() => navigate(`/category/${record.id}`)}
+                    onClick={() =>
+                        navigate(`/category/${record.id}`, {
+                            state: { id: record.id },
+                        })
+                    }
                 >
                     {text}
                 </button>
@@ -174,7 +178,11 @@ const CategoryTable = () => {
                 <>
                     <button
                         className="text-base px-4 py-1 rounded bg-[#ff0000] text-white"
-                        onClick={() => navigate(`/category/${record.id}`)}
+                        onClick={() =>
+                            navigate(`/category/${record.id}`, {
+                                state: { id: record.id },
+                            })
+                        }
                     >
                         Edit
                     </button>

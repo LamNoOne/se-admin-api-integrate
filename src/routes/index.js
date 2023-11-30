@@ -15,6 +15,7 @@ import {
     ForgotPassword,
     Profile,
     ProductEdit,
+    CategoryEdit,
 } from "../views"
 import RequireAuth from "../features/auth/RequireAuth"
 
@@ -36,7 +37,7 @@ export default function Router() {
                 { path: "/product/:id", element: <ProductEdit /> },
                 { path: "/category-list", element: <CategoryList /> },
                 { path: "/category", element: <Category /> },
-                { path: "/category/:id", element: <Category /> },
+                { path: "/category/:id", element: <CategoryEdit /> },
                 { path: "/user-list", element: <UserList /> },
                 { path: "/user", element: <User /> },
                 { path: "/user/:id", element: <User /> },
