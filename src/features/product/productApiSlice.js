@@ -13,10 +13,10 @@ export const productApiSlice = apiSlice.injectEndpoints({
                 }
                 return queryString
             },
+            providesTags: ["Product"],
         }),
         getProductById: builder.query({
             query: ({ id }) => `/api/products/get-product?id=${id}`,
-            providesTags: ["Product"],
         }),
         getLimitProduct: builder.query({
             query: (limit = 10) => `/api/products?_limit=${limit}`,
@@ -111,6 +111,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
                 url: `/api/products/delete-product?id=${id}`,
                 method: "DELETE",
             }),
+            invalidatesTags: ["Product"],
         }),
     }),
 })

@@ -10,7 +10,10 @@ import {
 } from "../components"
 import { useNavigate, useLocation } from "react-router-dom"
 import Specification from "../components/Specification"
-import { useUpdateProductByIdMutation } from "../features/product/productApiSlice"
+import {
+    useUpdateProductByIdMutation,
+    useDeleteProductByIdMutation,
+} from "../features/product/productApiSlice"
 
 const Product = (product) => {
     const naviagte = useNavigate()
@@ -18,6 +21,7 @@ const Product = (product) => {
     console.log(isCreate, "create")
     const location = useLocation()
     const [updateProductById, { isLoading }] = useUpdateProductByIdMutation()
+    const [deleteProductById] = useDeleteProductByIdMutation()
     // const productId = location.state?.id
     // const { data: product, isLoading, isSuccess, isError, error } = useGetProductByIdQuery({ id: productId })
     // const product = product?.metadata?.product
@@ -135,27 +139,35 @@ const Product = (product) => {
         handleChangeColor,
     }
 
-    const canSave = [
-        name,
-        description,
-        screen,
-        operatingSystem,
-        processor,
-        ram,
-        storageCapacity,
-        dimensions,
-        weight,
-        batteryCapacity,
-        frontCameraResolution,
-        rearCameraResolution,
-        connectivity,
-        color,
-        price,
-        stockQuantity,
-        categoryId,
-    ].every(Boolean) && !isLoading
+    const canSave =
+        [
+            name,
+            description,
+            screen,
+            operatingSystem,
+            processor,
+            ram,
+            storageCapacity,
+            dimensions,
+            weight,
+            batteryCapacity,
+            frontCameraResolution,
+            rearCameraResolution,
+            connectivity,
+            color,
+            price,
+            stockQuantity,
+            categoryId,
+        ].every(Boolean) && !isLoading
 
-    const submitHandleDeleteProduct = async () => {}
+    const submitHandleDeleteProduct = async () => {
+        try {
+            await deleteProductById({ id: product?.id }).unwrap()
+            naviagte('/product-list')
+        } catch (error) {
+            console.error(error)
+        }
+    }
     const submitHanleCreateProduct = async () => {}
     const submitHandleUpdateProduct = async () => {
         // Discuss update product's image,
