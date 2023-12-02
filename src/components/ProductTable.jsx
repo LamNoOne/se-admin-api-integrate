@@ -7,12 +7,17 @@ import { Button, Input, Space, Table, Pagination } from "antd"
 import { useGetAllProductQuery } from "../features/product/productApiSlice"
 
 const ProductTable = () => {
+    //
     const [limit, setlimit] = useState(20)
-    const navigate = useNavigate()
     const [current, setCurrent] = useState(1)
+    //
+
+    const navigate = useNavigate()
     const [searchText, setSearchText] = useState("")
     const [searchedColumn, setSearchedColumn] = useState("")
     const searchInput = useRef(null)
+
+    //
     const {
         data: products,
         isFetching,
@@ -26,6 +31,8 @@ const ProductTable = () => {
     if (!products) return <div>Missing products!</div>
     const total = products?.metadata?.total
     const data = products?.metadata?.products
+
+    //
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm()

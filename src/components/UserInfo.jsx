@@ -37,7 +37,7 @@ const UserInfo = (props) => {
     const handleUpdate = () => {
         console.log(type)
     }
-    const { firstName, lastName, email, phoneNumber } = props
+    const { firstName, lastName, imageUrl, email, phoneNumber, address, username } = props
     return (
         <section className="flex flex-row gap-6">
             <div className="flex justify-center items-center flex-col bg-white border shadow-md p-6 w-[322px]">

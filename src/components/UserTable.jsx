@@ -4,150 +4,20 @@ import { useNavigate } from "react-router-dom"
 import Highlighter from "react-highlight-words"
 import { Button, Input, Space, Table } from "antd"
 // Get data from API
-const data = [
-    {
-        id: 1,
-        lastName: "Adam",
-        firstName: "Taylor",
-        gender: "Male",
-        role: "admin",
-        img: "https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-1-40x40.jpg",
-        email: "taylor-adam@example.com",
-        createdAt: "May 15, 2021",
-        spent: "34.392.10",
-    },
-
-    {
-        id: 2,
-        lastName: "Anna",
-        firstName: "Wilson",
-        gender: "Female",
-        role: "customer",
-        img: "https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-2-40x40.jpg",
-        email: "wilson-anna@example.com",
-        createdAt: "February 26, 2021",
-        spent: "25.486.20",
-    },
-
-    {
-        id: 3,
-        lastName: "Brian",
-        firstName: "Wood",
-        gender: "Male",
-        role: "admin",
-        img: "https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-3-40x40.jpg",
-        email: "wood-brian@example.com",
-        createdAt: "August 17, 2021",
-        spent: "1.332.58",
-    },
-    {
-        id: 4,
-        lastName: "Charlotte",
-        firstName: "Jones",
-        gender: "Female",
-        role: "customer",
-        img: "https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-4-40x40.jpg",
-        email: "jones-charlotte@example.com",
-        createdAt: "December 31, 2021",
-        spent: "5.192.42",
-    },
-    {
-        id: 5,
-        lastName: "Ethan",
-        firstName: "Young",
-        gender: "Male",
-        role: "staff",
-        img: "https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-5-40x40.jpg",
-        email: "young-ethan@example.com",
-        createdAt: "September 28, 2021",
-        spent: "594.97",
-    },
-    {
-        id: 6,
-        lastName: "Helena",
-        firstName: "Garcia",
-        gender: "Female",
-        role: "staff",
-        img: "https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-6-40x40.jpg",
-        email: "garcia-helena@example.com",
-        createdAt: "February 23, 2021",
-        spent: "5.702.02",
-    },
-    {
-        id: 7,
-        lastName: "Isabel",
-        firstName: "Williams",
-        gender: "Female",
-        role: "staff",
-        img: "https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-7-40x40.jpg",
-        email: "williams-isabel@example.com",
-        createdAt: "October 2, 2021",
-        spent: "35.762.74",
-    },
-
-    {
-        id: 8,
-        lastName: "Jacob",
-        firstName: "Lee",
-        gender: "Male",
-        role: "customer",
-        img: "https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-8-40x40.jpg",
-        email: "lee-jacob@example.com",
-        createdAt: "May 12, 2021",
-        spent: "911.27",
-    },
-    {
-        id: 9,
-        lastName: "Jessica",
-        firstName: "Moore",
-        gender: "Male",
-        role: "customer",
-        img: "https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-9-40x40.jpg",
-        email: "moore-jessica@example.com",
-        createdAt: "June 26, 2021",
-        spent: "28.522.35",
-    },
-
-    {
-        id: 10,
-        lastName: "Kevin",
-        firstName: "Smith",
-        gender: "Female",
-        role: "customer",
-        img: "https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-10-40x40.jpg",
-        email: "smith-kevin@example.com",
-        createdAt: "April 4, 2021",
-        spent: "6.147.64",
-    },
-    {
-        id: 11,
-        lastName: "Olivia",
-        firstName: "Smith",
-        gender: "Male",
-        role: "customer",
-        img: "https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-11-40x40.jpg",
-        email: "smith-olivia@example.com",
-        createdAt: "November 9, 2021",
-        spent: "8.061.02",
-    },
-    {
-        id: 12,
-        lastName: "Ryan",
-        firstName: "Force",
-        gender: "Female",
-        role: "customer",
-        img: "https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-12-40x40.jpg",
-        email: "ford-ryan@example.com",
-        createdAt: "Oct 19, 2021",
-        spent: "973.64",
-    },
-]
+import { useGetAllUsersQuery } from "../features/user/userApiSlice"
 
 const UserTable = () => {
     const navigate = useNavigate()
     const [searchText, setSearchText] = useState("")
     const [searchedColumn, setSearchedColumn] = useState("")
     const searchInput = useRef(null)
+
+    const { data: users, isLoading } = useGetAllUsersQuery()
+
+    if (isLoading) return <div>Loading...</div>
+    if (!users) return <div>Missing users!</div>
+    const data = users?.metadata?.users
+
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm()
         setSearchText(selectedKeys[0])
@@ -273,7 +143,7 @@ const UserTable = () => {
             title: "Name",
             className: "text-base",
             dataIndex: ["firstName", "lastName"],
-            width: "40%",
+            width: "20%",
             ...getColumnSearchProps("firstName"),
             ...getColumnSearchProps("lastName"),
             sortDirections: ["descend", "ascend"],
@@ -286,19 +156,30 @@ const UserTable = () => {
                 >
                     <div
                         className="me-2 cursor-pointer"
-                        onClick={() => navigate(`/user/${record.id}`)}
+                        onClick={() =>
+                            navigate(`/user-list/${record.id}`, {
+                                state: { id: record.id },
+                            })
+                        }
                     >
                         <img
-                            src={record.img}
+                            src={record.imageUrl}
                             style={{
-                                width: "40px",
-                                height: "40px",
+                                width: "50px",
+                                height: "50px",
                                 objectFit: "contain",
                             }}
                         />
                     </div>
                     <div>
-                        <span className="text-base font-medium cursor-pointer hover:underline hover:text-blue-700" onClick={() => navigate(`/user/${record.id}`)}>
+                        <span
+                            className="text-base font-medium cursor-pointer hover:underline hover:text-blue-700"
+                            onClick={() =>
+                                navigate(`/user-list/${record.id}`, {
+                                    state: { id: record.id },
+                                })
+                            }
+                        >
                             {record.firstName + " " + record.lastName}
                         </span>
                         <div
@@ -307,11 +188,27 @@ const UserTable = () => {
                                 alignItems: "center",
                             }}
                         >
-                            <span>{record.email}</span>
+                            <a>{record.email}</a>
                         </div>
                     </div>
                 </div>
             ),
+        },
+        {
+            title: "Phone Number",
+            className: "text-base",
+            dataIndex: "phoneNumber",
+            key: "phoneNumber",
+            ...getColumnSearchProps("phoneNumber"),
+            render: (_, record) => <a>{record?.phoneNumber}</a>,
+        },
+        {
+            title: "Address",
+            className: "text-base",
+            dataIndex: "address",
+            key: "address",
+            ...getColumnSearchProps("address"),
+            render: (_, record) => <p>{record?.address}</p>,
         },
         {
             title: "Registered",
@@ -329,7 +226,7 @@ const UserTable = () => {
             dataIndex: "gender",
             key: "gender",
             ...getColumnSearchProps("gender"),
-            sorter: (a, b) => a.gender.length - b.gender.length,
+            render: (_, record) => <p>{record?.gender?.name}</p>,
         },
         {
             title: "Role",
@@ -337,8 +234,7 @@ const UserTable = () => {
             dataIndex: "role",
             key: "role",
             ...getColumnSearchProps("role"),
-            sorter: (a, b) => a.role - b.role,
-            sortDirections: ["descend", "ascend"],
+            render: (_, record) => <p>{record?.role?.name}</p>,
         },
         {
             title: "Action",
@@ -348,7 +244,11 @@ const UserTable = () => {
                 <>
                     <button
                         className="text-base px-4 py-1 rounded bg-[#ff0000] text-white"
-                        onClick={() => navigate(`/user/${record.id}`)}
+                        onClick={() =>
+                            navigate(`/user-list/${record.id}`, {
+                                state: { id: record.id },
+                            })
+                        }
                     >
                         Edit
                     </button>
@@ -356,6 +256,10 @@ const UserTable = () => {
             ),
         },
     ]
-    return <Table columns={columns} dataSource={data} pagination />
+    return (
+        <>
+            <Table columns={columns} dataSource={data} pagination />
+        </>
+    )
 }
 export default UserTable

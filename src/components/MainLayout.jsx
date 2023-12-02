@@ -8,7 +8,7 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
 import { Layout, Menu, Button, theme } from "antd"
 import { useNavigate } from "react-router-dom"
 import Container from "./Container"
-import AccountDropdown from './AccountDropdown'
+import AccountDropdown from "./AccountDropdown"
 const { Header, Sider, Content } = Layout
 const MainLayout = () => {
     const navigate = useNavigate()
@@ -32,13 +32,15 @@ const MainLayout = () => {
                         ADMIN
                     </h2>
                 </div>
-                <h5 className="text-xs mt-4 text-center font-semibold leading-6 text-white">APPLICATION</h5>
+                <h5 className="text-xs mt-4 text-center font-semibold leading-6 text-white">
+                    APPLICATION
+                </h5>
                 <Menu
                     onClick={handleOnClick}
                     theme="dark"
                     mode="inline"
                     defaultSelectedKeys={[""]}
-                    style={{ fontSize: '16px'}}
+                    style={{ fontSize: "16px" }}
                     items={[
                         {
                             key: "",
@@ -77,10 +79,6 @@ const MainLayout = () => {
                                     key: "user-list",
                                     label: "Users List",
                                 },
-                                {
-                                    key: "user",
-                                    label: "User",
-                                },
                             ],
                         },
                         {
@@ -92,10 +90,6 @@ const MainLayout = () => {
                                     key: "order-list",
                                     label: "Orders List",
                                 },
-                                {
-                                    key: "order",
-                                    label: "Order",
-                                },
                             ],
                         },
                         {
@@ -106,10 +100,7 @@ const MainLayout = () => {
                     ]}
                 />
             </Sider>
-            <Layout
-                className="site-layout"
-                style={{ height: "100vh"}}
-            >
+            <Layout className="site-layout" style={{ height: "100vh" }}>
                 <Header
                     style={{
                         padding: 0,
@@ -136,7 +127,9 @@ const MainLayout = () => {
                             height: 64,
                         }}
                     />
-                    <div className="admin-dropdown me-10 mt-4"><AccountDropdown /></div>
+                    <div className="admin-dropdown me-10 mt-4">
+                        <AccountDropdown />
+                    </div>
                 </Header>
                 <Content
                     style={{
@@ -144,7 +137,7 @@ const MainLayout = () => {
                         padding: 24,
                         overflow: "auto",
                         minHeight: 280,
-                        background: '#f5f7fa',
+                        background: "#f5f7fa",
                     }}
                 >
                     <Container>

@@ -2,45 +2,42 @@ import React, { useRef, useState } from "react"
 import { SearchOutlined } from "@ant-design/icons"
 import { useNavigate } from "react-router-dom"
 import Highlighter from "react-highlight-words"
-import { Button, Input, Space, Table } from "antd"
-// Get data from API
-const data = [
-    {
-        id: "#80294",
-        createAt: "Today at 6:10 pm",
-        status: "Pending",
-        quantity: "4",
-        total: "320.0",
-    },
-    {
-        id: "#63736",
-        createAt: "May 15, 2019	",
-        status: "Completed",
-        quantity: "7",
-        total: "2,574.31",
-    },
+import { Button, Input, Space, Table, Pagination } from "antd"
+import { useGetAllOrdersByUserIdQuery } from "../features/order/orderApiSlice"
+import formatDate from "../config/FormatDate"
 
-    {
-        id: "#63501",
-        createAt: "January 7 2019",
-        status: "Completed",
-        quantity: "1",
-        total: "34.00",
-    },
-    {
-        id: "#40278",
-        createAt: "October 19, 2018	",
-        status: "Completed",
-        quantity: "2",
-        total: "704.00",
-    },
-]
+const findColor = (status, record) => {
+    const index = Object.keys(record).findIndex(
+        (item) => String(status).toLowerCase() === item.toLowerCase()
+    )
+    return Object.entries(record)[index]
+}
 
-const OrderCustomerTable = () => {
+const statusRecord = {
+    pending: ["#900", "#ffdcdc"],
+    paid: ["#004b9a", "#d9ecff"],
+    delivering: ["#5e4f00", "#f9f1c8"],
+    delivered: ["#245900", "#def2d0"],
+}
+
+const OrderCustomerTable = ({ userId }) => {
+    const [limit, setlimit] = useState(5)
+    const [current, setCurrent] = useState(1)
     const navigate = useNavigate()
     const [searchText, setSearchText] = useState("")
     const [searchedColumn, setSearchedColumn] = useState("")
     const searchInput = useRef(null)
+    const { data: ordersUser, isLoading } = useGetAllOrdersByUserIdQuery({
+        id: userId,
+        page: current,
+        limit,
+    })
+
+    if (isLoading) return <div>Loading...</div>
+    if (!ordersUser) return <div>Missing order!</div>
+    const total = ordersUser?.metadata?.total
+    const data = ordersUser?.metadata?.orders
+
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm()
         setSearchText(selectedKeys[0])
@@ -163,17 +160,21 @@ const OrderCustomerTable = () => {
     })
     const columns = [
         {
-            title: "Code",
-            className: "text-base",
+            title: "Number",
+            classnumber: "text-base",
             dataIndex: "id",
-            width: "20%",
+            width: "10%",
             ...getColumnSearchProps("id"),
-            sorter: (a, b) => a.id.length - b.id.length,
+            sorter: (a, b) => a.id - b.id,
             sortDirections: ["descend", "ascend"],
             render: (text, record) => (
                 <span
                     className="text-base font-medium cursor-pointer hover:underline hover:text-blue-700"
-                    onClick={() => navigate(`/category/${record.id}`)}
+                    onClick={() =>
+                        navigate(`/order-list/${record.id}`, {
+                            state: { id: record.id },
+                        })
+                    }
                 >
                     {text}
                 </span>
@@ -182,61 +183,114 @@ const OrderCustomerTable = () => {
         {
             title: "Date",
             className: "text-base",
-            dataIndex: "createAt",
-            key: "createAt",
-            ...getColumnSearchProps("createAt"),
-            sorter: (a, b) => a.createAt - b.createAt,
+            dataIndex: "createdAt",
+            key: "createdAt",
+            width: "20%",
+            sorter: (a, b) => new Date(a.createAt) - new Date(b.createAt),
             sortDirections: ["descend", "ascend"],
-            render: (text) => <p>{text}</p>,
+            render: (text) => <span>{formatDate(text)}</span>,
+        },
+        {
+            title: "Customer",
+            className: "text-base",
+            dataIndex: "user",
+            key: "user",
+            render: (_, record) => (
+                <p>{`${record?.user?.firstName} ${record?.user?.lastName}`}</p>
+            ),
+        },
+        {
+            title: "Payment Method",
+            className: "text-base",
+            dataIndex: "paymentForm",
+            key: "paymentForm",
+            render: (_, record) => <p>{record?.paymentForm?.name}</p>,
         },
         {
             title: "Status",
             className: "text-base",
-            dataIndex: "status",
-            key: "status",
-            width: "20%",
-            ...getColumnSearchProps("status"),
-            sorter: (a, b) => a.status.length - b.status.length,
-            sortDirections: ["descend", "ascend"],
-            render: (text) => <span>{text}</span>,
+            dataIndex: "orderStatus",
+            key: "orderStatus",
+            render: (_, record) => {
+                const obj = findColor(record?.orderStatus?.name, statusRecord)
+                return (
+                    <>
+                        {obj ? (
+                            <span
+                                style={{
+                                    color: obj[1][0],
+                                    backgroundColor: obj[1][1],
+                                    padding: "4px 8px",
+                                    borderRadius: "2px",
+                                }}
+                            >
+                                {record?.orderStatus?.name}
+                            </span>
+                        ) : (
+                            <></>
+                        )}
+                    </>
+                )
+            },
         },
         {
-            title: "Quantity",
+            title: "Items",
             className: "text-base",
-            dataIndex: "quantity",
-            key: "quantity",
-            ...getColumnSearchProps("quantity"),
-            sorter: (a, b) => a.quantity - b.quantity,
+            dataIndex: "products",
+            key: "products",
+            sorter: (a, b) => a.products.length - b.products.length,
             sortDirections: ["descend", "ascend"],
-            render: (text) => <p>{text}</p>,
+            render: (_, record) => <p>{record?.products.length} items</p>,
         },
         {
             title: "Total",
             className: "text-base",
-            dataIndex: "total",
-            key: "total",
-            ...getColumnSearchProps("total"),
-            sorter: (a, b) => a.total - b.total,
-            sortDirections: ["descend", "ascend"],
-            render: (text) => <p>{text}</p>,
+            dataIndex: "products",
+            key: "products",
+            render: (_, record) => (
+                <p>
+                    $
+                    {record?.products.reduce(
+                        (acc, value) => acc + value.quantity * value.price,
+                        0
+                    )}
+                </p>
+            ),
         },
         {
             title: "Action",
             className: "text-base",
             dataIndex: "key",
-            width: "10%",
+            width: "15%",
             render: (_, record) => (
                 <>
                     <button
                         className="text-base px-4 py-1 rounded bg-[#ff0000] text-white"
-                        onClick={() => navigate(`/category/${record.id}`)}
+                        onClick={() =>
+                            navigate(`/order-list/${record.id}`, {
+                                state: { id: record.id },
+                            })
+                        }
                     >
-                        Edit
+                        Edit Status
                     </button>
                 </>
             ),
         },
     ]
-    return <Table columns={columns} dataSource={data} pagination />
+    return (
+        <>
+            <Table columns={columns} dataSource={data} pagination={false} />
+            <div className="flex items-center justify-end">
+                <Pagination
+                    total={total}
+                    current={current}
+                    onChange={setCurrent}
+                    pageSize={limit}
+                    showSizeChanger={false}
+                />
+            </div>
+        </>
+    )
 }
 export default OrderCustomerTable

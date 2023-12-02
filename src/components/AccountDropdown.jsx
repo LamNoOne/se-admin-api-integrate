@@ -6,15 +6,17 @@ import OrderIcon from "./Icon/OrderIcon"
 import UserLightIcon from "./Icon/UserLightIcon"
 import UserLoginIcon from "./Icon/UserLoginIcon"
 import Popup from './Popup'
+import { useGetUserInfoQuery } from "../features/user/userApiSlice"
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ")
 }
 
-// get user state
-const img = "https://res.cloudinary.com/dmnzkqysq/image/upload/v1700739119/faamys7udp7ifzuflvpm.jpg"
-
 export default function AccountDropdown() {
+    const { data: userInfo, isLoading } = useGetUserInfoQuery()
+    if(isLoading) return <div>Loading...</div>
+    if(!userInfo) return <div>Missing user info!</div>
+    const img = userInfo.metadata.user.imageUrl
     return (
         <Menu as="div" className="relative inline-block text-left z-50">
             <div>

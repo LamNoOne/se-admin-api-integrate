@@ -16,6 +16,7 @@ import {
     Profile,
     ProductEdit,
     CategoryEdit,
+    OrderEdit
 } from "../views"
 import RequireAuth from "../features/auth/RequireAuth"
 
@@ -39,10 +40,9 @@ export default function Router() {
                 { path: "/category", element: <Category /> },
                 { path: "/category/:id", element: <CategoryEdit /> },
                 { path: "/user-list", element: <UserList /> },
-                { path: "/user", element: <User /> },
-                { path: "/user/:id", element: <User /> },
+                { path: "/user-list/:id", element: <User /> },
                 { path: "/order-list", element: <OrderList /> },
-                { path: "/order", element: <Order /> },
+                { path: "/order-list/:id", element: <OrderEdit /> },
                 { path: "/profile", element: <Profile /> },
             ],
         },

@@ -13,6 +13,7 @@ import ForgotPassword from "./ForgotPassword"
 import Profile from "./Profile"
 import ProductEdit from "./ProductEdit"
 import CategoryEdit from "./CategoryEdit"
+import OrderEdit from "./OrderEdit"
 
 export {
     DashBoard,
@@ -29,5 +30,6 @@ export {
     ForgotPassword,
     Profile,
     ProductEdit,
-    CategoryEdit
+    CategoryEdit,
+    OrderEdit
 }
