@@ -64,7 +64,7 @@ const User = () => {
 
         content = (
             <section className="flex flex-col items-start gap-6">
-                <h1 className="text-[28px] font-medium">Jessica Moore</h1>
+                <h1 className="text-[28px] font-medium">{`${userInfo?.firstName} ${userInfo?.lastName}`}</h1>
                 <div className="flex flex-row gap-6 w-full">
                     <UserInfo {...userInfo} />
                     <div className="w-full bg-white p-6">

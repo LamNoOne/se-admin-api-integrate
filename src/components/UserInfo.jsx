@@ -44,7 +44,7 @@ const UserInfo = (props) => {
                 <div className="flex justify-center items-center flex-col">
                     <img
                         className="w-[96px] h-[96px] object-contain rounded-full"
-                        src="https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-1-96x96.jpg"
+                        src={imageUrl}
                         alt=""
                     />
                     <h3 className="text-base font-medium">{`${firstName} ${lastName}`}</h3>
