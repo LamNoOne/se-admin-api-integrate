@@ -16,7 +16,8 @@ import {
     Profile,
     ProductEdit,
     CategoryEdit,
-    OrderEdit
+    OrderEdit,
+    ProfileEdit,
 } from "../views"
 import RequireAuth from "../features/auth/RequireAuth"
 
@@ -43,7 +44,7 @@ export default function Router() {
                 { path: "/user-list/:id", element: <User /> },
                 { path: "/order-list", element: <OrderList /> },
                 { path: "/order-list/:id", element: <OrderEdit /> },
-                { path: "/profile", element: <Profile /> },
+                { path: "/profile", element: <ProfileEdit /> },
             ],
         },
         {

@@ -14,6 +14,7 @@ import Profile from "./Profile"
 import ProductEdit from "./ProductEdit"
 import CategoryEdit from "./CategoryEdit"
 import OrderEdit from "./OrderEdit"
+import ProfileEdit from "./ProfileEdit"
 
 export {
     DashBoard,
@@ -31,5 +32,6 @@ export {
     Profile,
     ProductEdit,
     CategoryEdit,
-    OrderEdit
+    OrderEdit,
+    ProfileEdit
 }
