@@ -1,6 +1,4 @@
 ## Welcome to SE-SHOP admin
-Demo: username: adminadmin, password: 123456
-
 ## To install project
 ### `npm install`
 
