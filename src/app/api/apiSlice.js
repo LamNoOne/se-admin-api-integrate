@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { setCredentials, logOut } from '../../features/auth/authSlice'
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: 'http://localhost:3055',
+    baseUrl: 'https://se-shop-api-8eiu.onrender.com',
     credentials: 'include',
     prepareHeaders: (headers) => {
         headers.set("x-api-version", 1)
