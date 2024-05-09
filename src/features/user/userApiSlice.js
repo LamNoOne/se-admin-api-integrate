@@ -3,13 +3,13 @@ import { apiSlice } from "../../app/api/apiSlice"
 export const userApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getAllUsers: builder.query({
-            query: () => "/api/users",
+            query: () => "/users",
         }),
         getUserById: builder.query({
-            query: ({ id }) => `/api/users/get-user?id=${id}`,
+            query: ({ id }) => `/users/get-user?id=${id}`,
         }),
         getUserInfo: builder.query({
-            query: () => `/api/users/get-info`,
+            query: () => `/users/get-info`,
         }),
         updateUserInfo: builder.mutation({
             query: (params) => {
@@ -22,7 +22,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 bodyFormData.append("lastName", lastName)
                 bodyFormData.append("address", address)
                 return {
-                    url: "/api/users/update-profile",
+                    url: "/users/update-profile",
                     method: "PATCH",
                     body: bodyFormData,
                 }
@@ -30,7 +30,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         }),
         deleteUserById: builder.query({
             query: ({ id }) => ({
-                url: `/api/users/delete-user?id=${id}`,
+                url: `/users/delete-user?id=${id}`,
                 method: "DELETE",
             }),
         }),

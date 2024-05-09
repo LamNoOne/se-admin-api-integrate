@@ -7,19 +7,19 @@ export const productApiSlice = apiSlice.injectEndpoints({
                 let queryString
                 const { page = 1, order, limit = 20 } = params
                 if (!order) {
-                    queryString = `/api/products?_page=${page}&_limit=${limit}`
+                    queryString = `/products?_page=${page}&_limit=${limit}`
                 } else {
-                    queryString = `/api/products?_page=${page}&_limit=${limit}&_order=${order}&_sortBy=price`
+                    queryString = `/products?_page=${page}&_limit=${limit}&_order=${order}&_sortBy=price`
                 }
                 return queryString
             },
             providesTags: ["Product"],
         }),
         getProductById: builder.query({
-            query: ({ id }) => `/api/products/get-product?id=${id}`,
+            query: ({ id }) => `/products/get-product?id=${id}`,
         }),
         getLimitProduct: builder.query({
-            query: (limit = 10) => `/api/products?_limit=${limit}`,
+            query: (limit = 10) => `/products?_limit=${limit}`,
         }),
         searchProduct: builder.query({
             query: (params) => {
@@ -32,9 +32,9 @@ export const productApiSlice = apiSlice.injectEndpoints({
                 } = params
                 let queryString
                 if (!order && name) {
-                    queryString = `/api/products?name=${name}&_page=${page}&_limit=${limit}`
+                    queryString = `/products?name=${name}&_page=${page}&_limit=${limit}`
                 } else if (order && name) {
-                    queryString = `/api/products?name=${name}&_page=${page}&_limit=${limit}&_order=${order}&_sortBy=${sortBy}`
+                    queryString = `/products?name=${name}&_page=${page}&_limit=${limit}&_order=${order}&_sortBy=${sortBy}`
                 }
                 return queryString
             },
@@ -89,7 +89,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
                 bodyFormData.append("stockQuantity", stockQuantity)
                 bodyFormData.append("categoryId", categoryId)
                 return {
-                    url: "/api/products/create",
+                    url: "/products/create",
                     method: "POST",
                     body: bodyFormData,
                 }
@@ -99,7 +99,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
             query: (params) => {
                 const { id, body } = params
                 return {
-                    url: `/api/products/update-product?id=${id}`,
+                    url: `/products/update-product?id=${id}`,
                     method: "PATCH",
                     body,
                 }
@@ -108,7 +108,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
         }),
         deleteProductById: builder.mutation({
             query: ({ id }) => ({
-                url: `/api/products/delete-product?id=${id}`,
+                url: `/products/delete-product?id=${id}`,
                 method: "DELETE",
             }),
             invalidatesTags: ["Product"],

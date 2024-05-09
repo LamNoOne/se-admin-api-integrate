@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { setCredentials, logOut } from '../../features/auth/authSlice'
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: 'https://se-shop-api-8eiu.onrender.com',
+    baseUrl: 'https://se-shop-api-8eiu.onrender.com/api/v1',
     credentials: 'include',
     prepareHeaders: (headers) => {
         headers.set("x-api-version", 1)
@@ -19,7 +19,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     if (result?.error?.status === 401) {
         console.log('sending refresh token')
         // send refresh token to get new access token 
-        const refreshResult = await baseQuery('/api/auth/refresh-token', api, extraOptions)
+        const refreshResult = await baseQuery('/auth/refresh-token', api, extraOptions)
         console.log(refreshResult)
         if (refreshResult?.data) {
             // store the new token 
